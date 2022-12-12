@@ -1,0 +1,7 @@
+version: "3.9"
+services:
+  web_static:
+    build: ./Static server
+    ports:
+      - "8282:80"
+  
