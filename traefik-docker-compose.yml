@@ -1,6 +1,4 @@
-version: "3.9"
-services:
-  reverse-proxy:
+ reverse-proxy:
     # The official v2 Traefik docker image
     image: traefik:v2.9
     # Enables the web UI and tells Traefik to listen to docker
@@ -17,14 +15,4 @@ services:
     # A container that exposes an API to show its IP address
     image: traefik/whoami
     labels:
-      - "traefik.http.routers.whoami.rule=Host(`localhost`)"
-  static:
-    build: ./Static server
-    labels: 
-      - "traefik.http.routers.static.rule=Host(`jarod.streckeisen.localhost`)"
-  express:
-    build: ./Express server
-    labels: 
-      - "traefik.http.routers.static.rule=Host(`express.localhost`)"
-
-      
+      - "traefik.http.routers.whoami.rule=Host(`whoami.docker.localhost`)"
