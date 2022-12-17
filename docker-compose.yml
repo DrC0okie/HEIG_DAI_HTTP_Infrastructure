@@ -17,14 +17,21 @@ services:
     # A container that exposes an API to show its IP address
     image: traefik/whoami
     labels:
-      - "traefik.http.routers.whoami.rule=Host(`localhost`)"
+      - "traefik.http.routers.whoami.rule=Host(`whoami.localhost`)"
   static:
     build: ./Static server
     labels: 
-      - "traefik.http.routers.static.rule=Host(`jarod.streckeisen.localhost`)"
+      - "traefik.http.routers.static.rule=Host(`localhost`)"
   express:
     build: ./Express server
+    scale: 5
     labels: 
-      - "traefik.http.routers.static.rule=Host(`express.localhost`)"
+      - "traefik.http.routers.express.rule=Host(`localhost`)"
+      - "traefik.http.services.express.loadbalancer.server.port=3000"
+      - "traefik.http.routers.express.rule=PathPrefix(`/api`)"
+      #Strip the /api to make the request call the "/" route of our dynamic server
+      - "traefik.http.middlewares.express-strip.stripprefix.prefixes=/api"
+      #Link the stripping middleware to the router
+      - "traefik.http.routers.express.middlewares=express-strip"
 
       
