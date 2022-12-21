@@ -38,6 +38,8 @@ services:
       - "traefik.http.routers.express.middlewares=express-strip"
   yadmgui:
     build: ./yadmgui
+    ports:
+    - "3000:3000"
     labels:
       - "traefik.http.routers.yadmgui.rule=Host(`manage.localhost`)"
       - "traefik.http.services.yadmgui.loadbalancer.server.port=3000"
