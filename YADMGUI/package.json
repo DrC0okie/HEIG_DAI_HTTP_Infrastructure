@@ -5,12 +5,12 @@
   "scripts": {
     "start": "node ./bin/www",
     "tailwind:css": "postcss public/stylesheets/tailwind.css -o public/stylesheets/style.css"
-
   },
   "dependencies": {
     "autoprefixer": "^10.4.13",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
+    "dockerode": "^3.3.4",
     "ejs": "^3.1.8",
     "express": "^4.18.2",
     "http-errors": "~1.6.3",
