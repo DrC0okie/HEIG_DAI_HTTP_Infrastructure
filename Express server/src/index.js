@@ -2,7 +2,9 @@
 var express = require('express');
 var app = express();
 const { networkInterfaces } = require('os');
+const cors = require('cors');
 const { generateJoke ,getInternalIp} = require('./utils');
+const path = require('path');
 
 const nets = networkInterfaces();
 const ips = getInternalIp(nets);
@@ -10,6 +12,10 @@ const ips = getInternalIp(nets);
 const Chuck  = require('chucknorris-io'),
       client = new Chuck();
 	  
+app.use(express.static(path.join(__dirname, 'views')));
+
+app.use(cors());
+
 app.set('view engine', 'ejs');
 
 app.get('/', (req, res)=>{

@@ -1,0 +1,1 @@
+setInterval(function () {fetch('localhost:3000')}, 5000);
