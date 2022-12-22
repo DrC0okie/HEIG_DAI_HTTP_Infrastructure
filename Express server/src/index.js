@@ -9,14 +9,19 @@ const ips = getInternalIp(nets);
 
 const Chuck  = require('chucknorris-io'),
       client = new Chuck();
+	  
+app.set('view engine', 'ejs');
 
 app.get('/', (req, res)=>{
 	console.log("Received request")
-    generateJoke(client).then((jokes)=>{
+    generateJoke(client).then((joke)=>{
         const result = {};
-        result.jokes = jokes;
+        result.joke = joke;
         result.ips = ips;
-        res.send(result);
+		console.log(ips);
+		res.render('index', { joke:joke.value, ip:ips});
+		
+        //res.send(result);
     });
 });
 
