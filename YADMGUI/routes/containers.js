@@ -6,7 +6,7 @@ const docker = new Docker();
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  docker.listContainers().then(containers=>{
+  docker.listContainers({all:true}).then(containers=>{
     console.log(containers);
     res.render('containers',{containers});
   })

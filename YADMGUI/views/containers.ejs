@@ -6,9 +6,15 @@
   </head>
   <body>
     <h1>List of containers </h1>
+    <div class="flex flex-row">
+      <%- include('partials/header'); %>
+
+    </div>
+    <div>
     <ul>
         <% for(let i = 0 ; i < containers.length;i++ ) {%>
             <li> <%= containers[i].Id %> </li>
         <%}%>
     </ul>
+  </div>
 </html>
