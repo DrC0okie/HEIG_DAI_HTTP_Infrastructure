@@ -1,10 +1,24 @@
-<div class="flex flex-col md:flex-row md:max-w-xl rounded-lg bg-white shadow-lg">
-    <img class=" w-full h-96 md:h-auto object-cover md:w-48 rounded-t-lg md:rounded-none md:rounded-l-lg" src="https://mdbootstrap.com/wp-content/uploads/2020/06/vertical.jpg" alt="" />
-    <div class="p-6 flex flex-col justify-start">
-      <h5 class="text-gray-900 text-xl font-medium mb-2">Card title</h5>
-      <p class="text-gray-700 text-base mb-4">
-        This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.
+<%
+  const color = container.State == "running" ? "bg-green-100" : "bg-red-100";
+  const runDisabled = container.State == "running" ? "disabled" : "";
+  const stopDisabled = container.State == "exited" ? "disabled" : "";
+%>
+
+<div class="flex flex-row rounded-lg shadow-lg <%=color%>">
+  <img class=" h-36 p-2" src="/images/docker.webp" alt="" />
+   <div class="p-6 flex flex-col justify-start">
+      <h5 class="text-gray-900 text-xl font-medium mb-2"><%= container.Names[0]%></h5>
+      
+      <p class="text-gray-700 text-sm mb-4">
+        <%=container.Id%>
       </p>
-      <p class="text-gray-600 text-xs">Last updated 3 mins ago</p>
+      <p class="text-gray-600 text-xs">Status : <%= container.Status %></p>
+
+      <div class="flex flex-row justify-end gap-4">
+        <button type="button" class="inline-block px-6 py-2.5 bg-green-500 text-white font-medium text-xs leading-tight uppercase rounded-full shadow-md hover:bg-green-600 hover:shadow-lg focus:bg-green-600 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-700 active:shadow-lg transition duration-150 ease-in-out <%=runDisabled%>">Run</button>
+        <button type="button" class="inline-block px-6 py-2.5 bg-red-600 text-white font-medium text-xs leading-tight uppercase rounded-full shadow-md hover:bg-red-700 hover:shadow-lg focus:bg-red-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-red-800 active:shadow-lg transition duration-150 ease-in-out <%=stopDisabled%>">Stop</button>    
+      </div>
+     
+     
     </div>
 </div>
