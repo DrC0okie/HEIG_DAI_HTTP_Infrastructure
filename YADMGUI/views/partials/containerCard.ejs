@@ -1,9 +1,31 @@
 <%
   const color = container.State == "running" ? "bg-green-100" : "bg-red-100";
-  const runDisabled = container.State == "running" ? "disabled" : "";
-  const stopDisabled = container.State == "exited" ? "disabled" : "";
+  const isRunning = container.State == "running"
 %>
+<script>
+  function startClickHandler(id){
+    fetch("/containers/run",{
+      method:"PUT",
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({id:id}),
+    }).then(response =>{
+      console.log(response);
+      location.reload();
+    })
+  }
 
+  function stopClickHandler(id){
+    fetch("/containers/stop",{
+      method:"PUT",
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({id:id}),
+    }).then(response =>{
+      console.log(response);
+      location.reload();
+    })
+  }
+
+</script>
 <div class="flex flex-row rounded-lg shadow-lg <%=color%>">
   <img class=" h-36 p-2" src="/images/docker.webp" alt="" />
    <div class="p-6 flex flex-col justify-start">
@@ -15,8 +37,13 @@
       <p class="text-gray-600 text-xs">Status : <%= container.Status %></p>
 
       <div class="flex flex-row justify-end gap-4">
-        <button type="button" class="inline-block px-6 py-2.5 bg-green-500 text-white font-medium text-xs leading-tight uppercase rounded-full shadow-md hover:bg-green-600 hover:shadow-lg focus:bg-green-600 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-700 active:shadow-lg transition duration-150 ease-in-out <%=runDisabled%>">Run</button>
-        <button type="button" class="inline-block px-6 py-2.5 bg-red-600 text-white font-medium text-xs leading-tight uppercase rounded-full shadow-md hover:bg-red-700 hover:shadow-lg focus:bg-red-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-red-800 active:shadow-lg transition duration-150 ease-in-out <%=stopDisabled%>">Stop</button>    
+        <% if(isRunning) { %>
+          <button onclick="startClickHandler('<%=container.Id%>')" type="button" class="inline-block px-6 py-2.5 bg-gray-500 text-white font-medium text-xs leading-tight uppercase rounded-full shadow-md" disabled>Run</button>
+          <button onclick="stopClickHandler('<%=container.Id%>')" type="button" class="inline-block px-6 py-2.5 bg-red-600 text-white font-medium text-xs leading-tight uppercase rounded-full shadow-md hover:bg-red-700 hover:shadow-lg focus:bg-red-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-red-800 active:shadow-lg transition duration-150 ease-in-out">Stop</button>    
+        <% } else { %>
+          <button onclick="startClickHandler('<%=container.Id%>')" type="button" class="inline-block px-6 py-2.5 bg-green-500 text-white font-medium text-xs leading-tight uppercase rounded-full shadow-md hover:bg-green-600 hover:shadow-lg focus:bg-green-600 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-700 active:shadow-lg transition duration-150 ease-in-out">Run</button>
+          <button  onclick="stopClickHandler('<%=container.Id%>')"type="button" class="inline-block px-6 py-2.5 bg-gray-500 text-white font-medium text-xs leading-tight uppercase rounded-full shadow-md" disabled>Stop</button>    
+        <%}%>
       </div>
      
      
