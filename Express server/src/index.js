@@ -7,7 +7,6 @@ const path = require('path');
 const nets = networkInterfaces();
 const ips = getInternalIp(nets);
 const Chuck  = require('chucknorris-io'), client = new Chuck();
-var offset = 1;
 var gifUrl = 'https://media.giphy.com/media/4M4LzMbq9sGBO/giphy.gif';
 	
 app.set('views', path.join(__dirname, 'views'));
@@ -27,20 +26,22 @@ app.get('/fetch', (req, res)=>{
         const result = {};
         result.joke = joke;
         result.ips = ips;
-		sendRequest(offset++);
+		sendRequest();
 		result.gifUrl = gifUrl;
         res.send(result);
     });
 });
 
-function sendRequest(offset){
+function sendRequest(){
+	var offset = Math.floor(Math.random() * 31);
 	var request = new XMLHttpRequest();
     var url = 'http://api.giphy.com/v1/gifs/search?q=Chuck+Norris&limit=1&offset='+ offset + '&api_key=8hrrGL62OfevX7eCtySSmuEnuAXgYTD5';
 	
 
     request.onreadystatechange=function() {
         if (this.readyState == 4 && this.status == 200) {
-			gifUrl = JSON.parse(this.responseText).data[0].url
+			gifUrl = JSON.parse(this.responseText).data[0].images.original.url
+			//console.log(JSON.parse(this.responseText).data[0].images.original.url);
         }
     }
     request.open("GET", url, true);

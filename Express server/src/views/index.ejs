@@ -13,15 +13,13 @@
 		<img id="gif" src='<%= gif %>'></img>
 		<script>
 			setInterval(function () {
-				fetch('http://localhost:3000/fetch').then( (response) => {
+				fetch('http://localhost/api/fetch').then( (response) => {
 					response.json().then( (data) => {
 						document.getElementById('ip').innerText = 'Static server : ' + Object.values(data.ips)[0]
 						document.getElementById('joke').innerText = data.joke.value
-						document.getElementById('gif').innerText = data.gifUrl
-						console.log(data.gifUrl)
-						console.log(document.getElementById('gif').innerText)
+						document.getElementById('gif').src = data.gifUrl
 					})
-				})
+				}).catch(error => console.log(error))
 			}, 5000);
 		</script>
 	</body>
