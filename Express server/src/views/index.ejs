@@ -1,19 +1,28 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Title of the document</title>
-    <style>
-      html * {
-        font-family: Open Sans;
-      }
-    </style>
-	<script type="text/javascript" src=fetch.js></script>
-</head>
-<body style="text-align: center">
-	<h1 id="ip" style="color: green"> Static server : <%= Object.values(ip)[0] %></h1>
-    <h3 id="joke">  
-        <%= joke %> 
-    </h3>
-	<img src= "https://media.giphy.com/media/4M4LzMbq9sGBO/giphy.gif"></img>
-</body>
+	<head>
+		<title>Express Server</title>
+		<style> html * {font-family: Open Sans;}</style>
+		
+	</head>
+	<body style="text-align: center">
+		<h1 id="ip" style="color: green"> Dynamic server : <%= Object.values(ip)[0] %></h1>
+	    <h3 id="joke">  
+	        <%= joke %> 
+	    </h3>
+		<img id="gif" src='<%= gif %>'></img>
+		<script>
+			setInterval(function () {
+				fetch('http://localhost:3000/fetch').then( (response) => {
+					response.json().then( (data) => {
+						document.getElementById('ip').innerText = 'Static server : ' + Object.values(data.ips)[0]
+						document.getElementById('joke').innerText = data.joke.value
+						document.getElementById('gif').innerText = data.gifUrl
+						console.log(data.gifUrl)
+						console.log(document.getElementById('gif').innerText)
+					})
+				})
+			}, 5000);
+		</script>
+	</body>
 </html>
