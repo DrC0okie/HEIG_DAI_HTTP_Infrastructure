@@ -22,8 +22,13 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
   static:
     build: ./Static server
+    deploy:
+      replicas: 3
     labels: 
       - "traefik.http.routers.static.rule=Host(`localhost`)"
+      # Enabling the sticky sessions with cookies
+      - "traefik.http.services.static.loadbalancer.sticky.cookie=true"
+      - "traefik.http.services.static.loadbalancer.sticky.cookie.name=stickyCookie"
   express:
     build: ./Express server
     deploy:
@@ -39,10 +44,10 @@ services:
   yadmgui:
     build: ./yadmgui
     ports:
-    - "3000:3000"
+    - "5000:5000"
     labels:
       - "traefik.http.routers.yadmgui.rule=Host(`manage.localhost`)"
-      - "traefik.http.services.yadmgui.loadbalancer.server.port=3000"
+      - "traefik.http.services.yadmgui.loadbalancer.server.port=5000"
       - "traefik.http.routers.yadmgui.entrypoints=web"
       
 
