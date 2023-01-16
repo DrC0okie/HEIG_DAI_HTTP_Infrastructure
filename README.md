@@ -2,8 +2,6 @@
 
 Authors: Jarod Streckeisen, TImothée Van Hove
 
-
-
 ## Getting started
 
 This project aims to launch multiple instances of web servers using a reverse proxy with a load balancer using the web interface (or the good old command line interface).
@@ -15,7 +13,7 @@ Firstly, you must install Docker on your local machine (see the [Docker document
 Then clone this repo, open your terminal in the project directory and run :
 
 ```
-docker-compose up --build
+docker-compose up -d --build
 ```
 
 ### Run containers
@@ -40,7 +38,7 @@ static:
 
 #### From the user interface
 
-From your web browser, go to [manage.localhost](manage.localhost) . From there you can start, stop, create and delete docker containers. Note that the web application retrieve all your local docker containers. So you will be able to delete existing docker containers (even those non related to this project), so be careful!
+From your web browser, go to [manage.localhost](manage.localhost). From there you can start, stop, create and delete docker containers. Note that the web application retrieve all your local docker containers. So you will be able to delete existing docker containers (even those non related to this project), so be careful!
 
 **Warning!** It is also possible to stop the reverse proxy and web application containers (from the web application), in which case, either the web application or the static/dynamic servers won't be reachable anymore. To fix that, you must stop all running container and up again the `docker-compose.yml`.
 
@@ -54,11 +52,13 @@ From your web browser, go to [manage.localhost](manage.localhost) . From there y
 
 ### Docker configuration
 
+This is the `docker-compose.yml` configuration.
 
+##### Reverse proxy and load balancer
 
-##### Reverse proxy
+Firstly, this project uses the [traefik](https://doc.traefik.io/traefik/providers/docker/) image from [dockerhub](https://hub.docker.com/_/traefik/).
 
-
+In order to configure the reverse proxy & load balancer, you will need configure it as follow:
 
 ```
   reverse-proxy:
@@ -83,7 +83,7 @@ From your web browser, go to [manage.localhost](manage.localhost) . From there y
 
 ##### Static server configuration
 
-
+The static server is configured to enable sticky sessions (see the [traefik documentation](https://doc.traefik.io/traefik/routing/services/#sticky-sessions)). This server is accessible by default at [localhost](localhost).
 
 ```
   static:
@@ -102,7 +102,7 @@ From your web browser, go to [manage.localhost](manage.localhost) . From there y
 
 ##### Dynamic server configuration
 
-
+The Dynamic server is accessible by default at [localhost/api](localhost/api).
 
 ```
   express:
@@ -137,15 +137,11 @@ From your web browser, go to [manage.localhost](manage.localhost) . From there y
         - /var/run/docker.sock:/var/run/docker.sock
 ```
 
-
-
-
-
-
-
 ### Static server
 
+To create the static server, we simply used a free template from [here](https://www.free-css.com/free-css-templates/page285/meyawo).
 
+This server keeps track of the user sessions whit a sticky session mechanism. The server itself doesn't uses cookies, it is the reverse proxy that manages it and redirects automatically each session to the same static server. By deleting the line `- "traefik.http.services.static.loadbalancer.sticky.cookie=true"` in the `docker-compose.yml` file, each session will be served by a different static server at each connexion.
 
 ### Dynamic server
 
