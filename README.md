@@ -139,13 +139,19 @@ The Dynamic server is accessible by default at [localhost/api](localhost/api).
 
 ### Static server
 
-To create the static server, we simply used a free template from [here](https://www.free-css.com/free-css-templates/page285/meyawo).
+To create the static server, we simply used a free template from [here](https://www.free-css.com/free-css-templates/page285/meyawo), and changed few text in it.
 
 This server keeps track of the user sessions whit a sticky session mechanism. The server itself doesn't uses cookies, it is the reverse proxy that manages it and redirects automatically each session to the same static server. By deleting the line `- "traefik.http.services.static.loadbalancer.sticky.cookie=true"` in the `docker-compose.yml` file, each session will be served by a different static server at each connexion.
 
 ### Dynamic server
 
+The dynamic server shows funny Chuck Norris jokes and displays a gif image. Every 5 seconds the joke and the gif is changed.
 
+To get the jokes, we used the https://api.chucknorris.io/ API
+
+To get the gif images, we used the [giphy API](https://developers.giphy.com/docs/api/).
+
+To serve dynamic content, we used express and ejs.
 
 ### Reverse Proxy
 
