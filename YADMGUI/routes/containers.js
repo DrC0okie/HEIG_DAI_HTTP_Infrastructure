@@ -58,28 +58,23 @@ router.put('/stopAll', function (req, res, next) {
 
   });
 })
-
+//My attempt to create a new instance... (Works in local but not inside container)
 router.post('/create', function (req, res, next) {
   const type = req.body.type;
   const home = path.join(__dirname, '..');
-
   var nbInstance = {
     express: 0,
     static: 0,
   }
   docker.listContainers({ all: true }).then((containers) => {
     containers.forEach((container) => {
-      console.log(container.Image);
       if (container.Image == staticImgName) {
         nbInstance.static += 1;
-        console.log("isstatic")
       }
       if (container.Image == expressImgName) {
         nbInstance.express += 1;
-        console.log("isexpress")
       }
     })
-    console.log(nbInstance);
     if (type == "static") {
       nbInstance.static += 1;
     }
