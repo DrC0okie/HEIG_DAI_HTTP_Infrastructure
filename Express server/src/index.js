@@ -33,7 +33,7 @@ app.get('/fetch', (req, res)=>{
 });
 
 function sendRequest(){
-	var offset = Math.floor(Math.random() * 31);
+	var offset = Math.floor(Math.random() * 51);
 	var request = new XMLHttpRequest();
     var url = 'http://api.giphy.com/v1/gifs/search?q=Chuck+Norris&limit=1&offset='+ offset + '&api_key=8hrrGL62OfevX7eCtySSmuEnuAXgYTD5';
 	
