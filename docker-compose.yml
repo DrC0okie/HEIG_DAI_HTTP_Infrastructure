@@ -11,7 +11,6 @@ services:
     - --api.insecure=true 
     - --providers.docker
     - --entrypoints.web.address=:80
-
     ports:
       # The HTTP port
       - "80:80"
@@ -20,6 +19,7 @@ services:
     volumes:
       # So that Traefik can listen to the Docker events
       - /var/run/docker.sock:/var/run/docker.sock
+      
   static:
     build: ./Static server
     deploy:
@@ -30,6 +30,7 @@ services:
       # Enabling the sticky sessions with cookies
       - "traefik.http.services.static.loadbalancer.sticky.cookie=true"
       - "traefik.http.services.static.loadbalancer.sticky.cookie.name=stickyCookie"
+      
   express:
     build: ./Express server
     deploy:
@@ -43,16 +44,12 @@ services:
       - "traefik.http.middlewares.express-strip.stripprefix.prefixes=/api"
       #Link the stripping middleware to the router
       - "traefik.http.routers.express.middlewares=express-strip"
+      
   yadmgui:
     build: ./yadmgui
     labels:
       - "traefik.http.routers.yadmgui.rule=Host(`manage.localhost`)"
       - "traefik.http.services.yadmgui.loadbalancer.server.port=5000"
-      - "traefik.http.routers.yadmgui.entrypoints=web"
-      
-
+      - "traefik.http.routers.yadmgui.entrypoints=web"  
     volumes:
         - /var/run/docker.sock:/var/run/docker.sock
-
-
-      
