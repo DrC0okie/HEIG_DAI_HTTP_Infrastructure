@@ -23,8 +23,9 @@ services:
   static:
     build: ./Static server
     deploy:
-      replicas: 3
+      replicas: 1
     labels: 
+      - "traefik.enable=true"
       - "traefik.http.routers.static.rule=Host(`localhost`)"
       # Enabling the sticky sessions with cookies
       - "traefik.http.services.static.loadbalancer.sticky.cookie=true"
@@ -32,8 +33,9 @@ services:
   express:
     build: ./Express server
     deploy:
-      replicas: 3
+      replicas: 1
     labels: 
+      - "traefik.enable=true"
       - "traefik.http.routers.express.rule=Host(`localhost`)"
       - "traefik.http.services.express.loadbalancer.server.port=3000"
       - "traefik.http.routers.express.rule=PathPrefix(`/api`)"
@@ -43,8 +45,6 @@ services:
       - "traefik.http.routers.express.middlewares=express-strip"
   yadmgui:
     build: ./yadmgui
-    ports:
-    - "5000:5000"
     labels:
       - "traefik.http.routers.yadmgui.rule=Host(`manage.localhost`)"
       - "traefik.http.services.yadmgui.loadbalancer.server.port=5000"
