@@ -43,7 +43,12 @@ router.delete('/remove', function (req, res, next) {
 router.put('/runAll', function (req, res, next) {
   docker.listContainers({ all: true }, (err, containers) => {
     containers.forEach((containerInfo) => {
-      docker.getContainer(containerInfo.Id).start()
+      docker.getContainer(containerInfo.Id).start().catch((err)=>{
+        //Need to catch error otherwise if a container is already started it throw an error
+        if(err.statusCode != 304){
+          res.status(err.statusCode).json({msg: "Error running all container"});
+        }
+      })
     });
     res.status(200).json({ msg: "All container are running" });
 
