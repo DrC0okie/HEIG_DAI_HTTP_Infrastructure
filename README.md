@@ -38,7 +38,7 @@ static:
 
 #### From the user interface
 
-From your web browser, go to [manage.localhost](manage.localhost). From there you can start, stop, create and delete docker containers. Note that the web application retrieve all your local docker containers. So you will be able to delete existing docker containers (even those non related to this project), so be careful!
+From your web browser, go to [manage.localhost](manage.localhost). From there you can start, stop and delete docker containers. Note that the web application retrieve all your local docker containers. So you will be able to delete existing docker containers (even those non related to this project), so be careful!
 
 **Warning!** It is also possible to stop the reverse proxy and web application containers (from the web application), in which case, either the web application or the static/dynamic servers won't be reachable anymore. To fix that, you must stop all running container and up again the `docker-compose.yml`.
 
@@ -165,11 +165,54 @@ To serve dynamic content, we used express and ejs. In the javaScript server, are
 ![](C:\Users\timot\Documents\HEIG\DAI\Labos\HEIG_DAI_HTTP_Infrastructure\figures\web_interface.png)
 
 
+The web app has been done from the ground up by Jarod Streckeisen as a technical challenge. It allows a user to run/stop/start/delete existing containers. The app can run either on the host machine or inside a Docker container.
 
-The web app has been done from the ground up by Jarod Streckeisen as a technical challenge. It allows a user to run/stop/delete existing containers. Because the application is running inside a container, it is not currently possible to create new container instances. To do it, you'll need to use the following command:
+#### How to run 
 
-`docker `
+By default, an instance of YADMGUI is started within our infrastructure in a Docker container, however if you want to run it on your machine, follow theses steps :
+
+go inside the YADMGUI directory, install the dependencies with the following command.
+
+``` 
+npm install
+
+```
+after the installation ended you can run the application 
+
+```
+npm run start
+```
+it can then be accessed on any web browser at http://localhost:5000 (5000 being the default port and can be changed)
+#### Technologies and Libraries
+
+We used Node.js, Express, and EJS for our web application. Node.js is a JavaScript runtime that allows us to run JavaScript on the server side. Express is a web framework for Node.js that makes it easy to handle routing and middleware. EJS is a template engine that allows us to embed JavaScript code in our HTML, making it easy to generate dynamic HTML on the server side.
+
+We used the [Dockerode](https://www.npmjs.com/package/dockerode) library to communicate with the Docker API in our web application. Dockerode is a Node.js library that provides an easy-to-use interface for interacting with the Docker API. 
+
+We also used [docker-compose](https://github.com/PDMLab/docker-compose) library in attempt to create new instance of our static and dynamic servers.
+
+#### Features
+
+ - List all containers and display somes informations about them, including their name, their id and their status
+ - Run a stopped containers
+ - Stop a running containers
+ - Delete a stopped containers
+ - Run all containers
+ - Stop all containers
+ - (Add an instance of our static server)
+ - (Add an instance of our dynamic server)
+
+#### Caveats 
+
+**Adding an instance doesn't work if the app is inside a Docker container**
+
+Context :
+
+For some reason, when we run our infrastructure and then try to add a new instance of our static or dynamic server. traefik doesn't recognize the new container. So our only way to properly scale them is to use the **--scale \[SERVICE]=\[NUMBER]** argument in the **docker-compose up** command. 
+
+To use the docker-compose library, both docker-compose and Docker must be installed on the host machine. However, if the app is running in a container with Docker installed, at this time i had no idea how to tell docker-compose to use the host machine docker API.
 
 
+Solution:
 
-TODO=> décrit ta belle page =)
+After further research, one solution is to use the -H or --host flag when running docker-compose commands, which allows you to specify the host's Docker daemon. We could also use the Docker contexts system to tell Docker inside the container to use the host machine docker engine.
