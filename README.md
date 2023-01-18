@@ -144,7 +144,7 @@ This server keeps track of the user sessions with a sticky session mechanism. Th
 
 ### Dynamic server
 
-![](figures\Dynamic Server.png)
+![](figures/Dynamic Server.png)
 
 The dynamic server shows funny Chuck Norris jokes and displays a gif image. Every 5 seconds the joke and the gif is changed.
 
@@ -158,7 +158,7 @@ To serve dynamic content, we used express and ejs. In the javaScript server, are
 
 ### Management web app
 
-![](figures\web_interface.png)
+![](figures/web_interface.png)
 
 
 The web app has been done from the ground up by Jarod Streckeisen as a technical challenge. It allows a user to run/stop/start/delete existing containers. The app can run either on the host machine or inside a Docker container.
