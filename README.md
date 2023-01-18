@@ -24,7 +24,7 @@ You can either run container individually from the terminal or by using the web 
 
 In the `docker-compose.yml` file, you can change the configuration and define the number of static /  dynamic server instances you want to run by changing the "replicas"parameters:
 
-```
+```dockerfile
 static:
     build: ./Static server
     deploy:
@@ -48,7 +48,12 @@ From your web browser, go to [manage.localhost](manage.localhost). From there yo
 
 ### Overview
 
+The infrastructure is composed of:
 
+- Multiple static web server instances
+- Multiple Dynamic web server instances
+- A reverse proxy that manages load balancing and sticky sessions
+- A web application that manages the running containers
 
 ### Docker configuration
 
@@ -60,7 +65,7 @@ Firstly, this project uses the [traefik](https://doc.traefik.io/traefik/provider
 
 In order to configure the reverse proxy & load balancer, you will need configure it as follow:
 
-```
+```dockerfile
   reverse-proxy:
     # The official v2 Traefik docker image
     image: traefik:v2.9
@@ -79,13 +84,11 @@ In order to configure the reverse proxy & load balancer, you will need configure
       - /var/run/docker.sock:/var/run/docker.sock
 ```
 
-
-
 ##### Static server configuration
 
 The static server is configured to enable sticky sessions (see the [traefik documentation](https://doc.traefik.io/traefik/routing/services/#sticky-sessions)). This server is accessible by default at [localhost](localhost).
 
-```
+```dockerfile
   static:
     build: ./Static server
     deploy:
@@ -98,13 +101,11 @@ The static server is configured to enable sticky sessions (see the [traefik docu
       - "traefik.http.services.static.loadbalancer.sticky.cookie.name=stickyCookie"
 ```
 
-
-
 ##### Dynamic server configuration
 
-The Dynamic server is accessible by default at [localhost/api](localhost/api).
+The Dynamic server is accessible by default at [localhost/api](localhost/api). The reverse proxy will route all requests from this address directly to the dynamic server. The load balancer will perform a round robin on each connexion to balance the traffic on each individual dynamic server.
 
-```
+```dockerfile
   express:
     build: ./Express server
     deploy:
@@ -124,9 +125,9 @@ The Dynamic server is accessible by default at [localhost/api](localhost/api).
 
 ##### Web interface configuration
 
+The web interface in reachable by default at [manage.localhost](manage.localhost). No Sticky session is configured for it, as it is only aimed to be used by the local system administrator to maintain the infrastructure.
 
-
-```
+```dockerfile
   yadmgui:
     build: ./yadmgui
     labels:
@@ -141,9 +142,11 @@ The Dynamic server is accessible by default at [localhost/api](localhost/api).
 
 To create the static server, we simply used a free template from [here](https://www.free-css.com/free-css-templates/page285/meyawo), and changed few text in it.
 
-This server keeps track of the user sessions whit a sticky session mechanism. The server itself doesn't uses cookies, it is the reverse proxy that manages it and redirects automatically each session to the same static server. By deleting the line `- "traefik.http.services.static.loadbalancer.sticky.cookie=true"` in the `docker-compose.yml` file, each session will be served by a different static server at each connexion.
+This server keeps track of the user sessions with a sticky session mechanism. The server itself doesn't uses cookies, it is the reverse proxy that manages it and redirects automatically each session to the same static server. By deleting the line `- "traefik.http.services.static.loadbalancer.sticky.cookie=true"` in the `docker-compose.yml` file, each session will be served by a different static server at each connexion because of the load-balancing mechanism.
 
 ### Dynamic server
+
+![](C:\Users\timot\Documents\HEIG\DAI\Labos\HEIG_DAI_HTTP_Infrastructure\figures\Dynamic Server.png)
 
 The dynamic server shows funny Chuck Norris jokes and displays a gif image. Every 5 seconds the joke and the gif is changed.
 
@@ -151,11 +154,22 @@ To get the jokes, we used the https://api.chucknorris.io/ API
 
 To get the gif images, we used the [giphy API](https://developers.giphy.com/docs/api/).
 
-To serve dynamic content, we used express and ejs.
+To serve dynamic content, we used express and ejs. In the javaScript server, are managed all the api calls. We embedded a js script directly in the HTML code to perform a fetch on the sever (localhost/fetch) every 5 seconds. When the server receives the request, it will update the ejs variables in the HTML page.
 
 ### Reverse Proxy
 
 
 
-### Web user interface
+### Management web app
 
+![](C:\Users\timot\Documents\HEIG\DAI\Labos\HEIG_DAI_HTTP_Infrastructure\figures\web_interface.png)
+
+
+
+The web app has been done from the ground up by Jarod Streckeisen as a technical challenge. It allows a user to run/stop/delete existing containers. Because the application is running inside a container, it is not currently possible to create new container instances. To do it, you'll need to use the following command:
+
+`docker `
+
+
+
+TODO=> décrit ta belle page =)
