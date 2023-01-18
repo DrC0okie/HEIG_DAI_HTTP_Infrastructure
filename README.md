@@ -101,7 +101,7 @@ The static server is configured to enable sticky sessions (see the [traefik docu
 
 ##### Dynamic server configuration
 
-The Dynamic server is accessible by default at [localhost/api](localhost/api). The reverse proxy will route all requests from this address directly to the dynamic server. The load balancer will perform a round robin on each connexion to balance the traffic on each individual dynamic server.
+The Dynamic server is accessible by default at [localhost/api](localhost/api). The reverse proxy will route all requests from this address directly to the dynamic server. The load balancer will perform a round robin on each connection to balance the traffic on each individual dynamic server.
 
 ```dockerfile
   express:
@@ -140,7 +140,7 @@ The web interface in reachable by default at [manage.localhost](manage.localhost
 
 To create the static server, we simply used a free template from [here](https://www.free-css.com/free-css-templates/page285/meyawo), and changed few text in it.
 
-This server keeps track of the user sessions with a sticky session mechanism. The server itself doesn't uses cookies, it is the reverse proxy that manages it and redirects automatically each session to the same static server. By deleting the line `- "traefik.http.services.static.loadbalancer.sticky.cookie=true"` in the `docker-compose.yml` file, each session will be served by a different static server at each connexion because of the load-balancing mechanism.
+This server keeps track of the user sessions with a sticky session mechanism. The server itself doesn't uses cookies, it is the reverse proxy that manages it and redirects automatically each session to the same static server. By deleting the line `- "traefik.http.services.static.loadbalancer.sticky.cookie=true"` in the `docker-compose.yml` file, each session will be served by a different static server at each connection because of the load-balancing mechanism.
 
 ### Dynamic server
 
