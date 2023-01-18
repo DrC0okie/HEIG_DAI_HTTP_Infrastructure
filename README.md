@@ -144,7 +144,7 @@ This server keeps track of the user sessions with a sticky session mechanism. Th
 
 ### Dynamic server
 
-![](figures/Dynamic Server.png)
+![](figures/DynamicServer.png)
 
 The dynamic server shows funny Chuck Norris jokes and displays a gif image. Every 5 seconds the joke and the gif is changed.
 
