@@ -161,7 +161,7 @@ To serve dynamic content, we used express and ejs. In the javaScript server, are
 ![](figures/web_interface.png)
 
 
-The web app has been done from the ground up by Jarod Streckeisen as a technical challenge. It allows a user to run/stop/start/delete existing containers. The app can run either on the host machine or inside a Docker container.
+The web app has been done from the ground up by Jarod Streckeisen as a technical challenge. It allows a user to run/stop/delete existing containers. The app can run either on the host machine or inside a Docker container.
 
 #### How to run 
 
