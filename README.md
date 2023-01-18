@@ -44,8 +44,6 @@ From your web browser, go to [manage.localhost](manage.localhost). From there yo
 
 ## Project description
 
-
-
 ### Overview
 
 The infrastructure is composed of:
@@ -158,8 +156,6 @@ To serve dynamic content, we used express and ejs. In the javaScript server, are
 
 ### Reverse Proxy
 
-
-
 ### Management web app
 
 ![](C:\Users\timot\Documents\HEIG\DAI\Labos\HEIG_DAI_HTTP_Infrastructure\figures\web_interface.png)
@@ -175,7 +171,6 @@ go inside the YADMGUI directory, install the dependencies with the following com
 
 ``` 
 npm install
-
 ```
 after the installation ended you can run the application 
 
@@ -183,6 +178,7 @@ after the installation ended you can run the application
 npm run start
 ```
 it can then be accessed on any web browser at http://localhost:5000 (5000 being the default port and can be changed)
+
 #### Technologies and Libraries
 
 We used Node.js, Express, and EJS for our web application. Node.js is a JavaScript runtime that allows us to run JavaScript on the server side. Express is a web framework for Node.js that makes it easy to handle routing and middleware. EJS is a template engine that allows us to embed JavaScript code in our HTML, making it easy to generate dynamic HTML on the server side.
@@ -206,13 +202,8 @@ We also used [docker-compose](https://github.com/PDMLab/docker-compose) library 
 
 **Adding an instance doesn't work if the app is inside a Docker container**
 
-Context :
-
 For some reason, when we run our infrastructure and then try to add a new instance of our static or dynamic server. traefik doesn't recognize the new container. So our only way to properly scale them is to use the **--scale \[SERVICE]=\[NUMBER]** argument in the **docker-compose up** command. 
 
 To use the docker-compose library, both docker-compose and Docker must be installed on the host machine. However, if the app is running in a container with Docker installed, at this time i had no idea how to tell docker-compose to use the host machine docker API.
-
-
-Solution:
 
 After further research, one solution is to use the -H or --host flag when running docker-compose commands, which allows you to specify the host's Docker daemon. We could also use the Docker contexts system to tell Docker inside the container to use the host machine docker engine.
